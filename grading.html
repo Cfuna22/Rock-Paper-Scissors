@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Grading System</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #020f29ee;
+        }
+
+        h1 {
+            text-align: center;
+            color: #948e34;
+        }
+
+        .form-section, .table-section {
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            font-size: 35px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        input {
+            padding: 10px;
+            margin: 5px;
+            background: #0c2a7c;
+            color: white;
+            border: none;
+            width: 200px;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #01103b;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 2px solid #b49999c0;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+
+            background-color: #01103b;
+            color: white;
+        }
+
+        .grade-A {
+            color: #41eb41;
+            font-weight: bold;
+        }
+        .grade-F {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+        <h1>Student Grading System</h1>
+
+        <div class="form-section">
+            <input type="text" id="studentName" placeholder="student Name">
+            <input type="number" id="studentScore" placeholder="score (0-100)" min="0" max="100">
+            <button onclick="addStudent()">Add</button>
+            <button onclick="clearAll()">clearAll</button>
+        </div>
+
+        <div class="table-section">
+            <table id="gradeTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Score</th>
+                        <th>Grade</th>
+                        <th>Feedback</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+
+
+        <script>
+            let studentCount = 0;
+
+            function getGrade(score){
+                if (score >= 90) return {grade: "A", feedback: "Excellent"};
+                if (score >= 80) return {grade: "B", feedback: "Very Good"};
+                if (score >= 70) return {grade: "C", feedback: "Good"};
+                if (score >= 60) return {grade: "D", feedback: "Fair"};
+                return {grade: "F", feedback: "You need to be Serious Mehn"};
+            }
+
+            function addStudent() {
+                const stdName = document.getElementById("studentName").value.trim();
+                const scoreInput = document.getElementById("studentScore").value.trim();
+                const score = Number(scoreInput);
+
+                if (!stdName || stdName === "" || scoreInput === "" || isNaN(score) || score < 0 || score > 100) {
+                    alert ("You are a failure! \n fill the required field with the appropriate data")
+                    return;
+                }
+
+                const {grade, feedback} = getGrade(score);
+                const tableBody = document.querySelector("#gradeTable tbody");
+                studentCount++;
+            
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${studentCount}</td>
+                    <td>${stdName}</td>
+                    <td>${score}</td>
+                    <td class="grade-${grade}">${grade}</td>
+                    <td>${feedback}</td>
+                `;
+
+                tableBody.appendChild(row)
+
+                document.getElementById("studentName").value = "";
+                document.getElementById("studentScore").value = "";
+            }
+
+
+            function clearAll(){
+                document.querySelector("#gradeTable tbody").innerHTML = "";
+                studentCount = 0;
+            }
+
+        </script>
+</body>
+</html>
